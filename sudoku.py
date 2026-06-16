@@ -80,6 +80,16 @@ premise = False
 while premise == False:
     premise = initialPuzzleEntry()
 
+print("original premise")
+print(premise[0:8])
+print(premise[9:17])
+print(premise[18:26])
+print(premise[27:35])
+print(premise[36:44])
+print(premise[45:53])
+print(premise[54:62])
+print(premise[63:71])
+print(premise[72:80])
 
 
 
@@ -131,21 +141,25 @@ def checkUTotal(uGrid):
 
 def initializeUGrid(premise):
     uGrid = []
+    xPremise = premise
     for x in range(81):
         uGrid += ["123456789"]
-    uTotal = checkUTotal(uGrid) # initialize uTotal (total potential values in grid)
-    uTotalNew = 9*81
-    while uTotalNew >= uTotal:
-        for i in range(len(premise)):
-            if premise[i] != " ":
-                uGrid = rowReduce(uGrid, i, premise[i])
-                uGrid = colReduce(uGrid, i, premise[i])
-                uGrid = tbtReduce(uGrid, i, premise[i])
-        premise = lookForSingleUs(uGrid)
+    uTotal0 = checkUTotal(uGrid) # initialize uTotal (total potential values in grid)
+    uTotal1 = 10*81
+    while uTotal1 > uTotal0:
+        print("debug")
+        for i in range(len(xPremise)):
+            if xPremise[i] != " ":
+                uGrid = rowReduce(uGrid, i, xPremise[i])
+                uGrid = colReduce(uGrid, i, xPremise[i])
+                uGrid = tbtReduce(uGrid, i, xPremise[i])
+        xPremise = lookForSingleUs(uGrid)
         uTotalNew = checkUTotal(uGrid)
-    return uGrid
+    return xPremise, uGrid
 
-print("original premise")
+
+premise, uGrid = initializeUGrid(premise)
+print("grid state after initialization and first reduction")
 print(premise[0:8])
 print(premise[9:17])
 print(premise[18:26])
@@ -156,8 +170,7 @@ print(premise[54:62])
 print(premise[63:71])
 print(premise[72:80])
 
-uGrid = initializeUGrid(premise)
-print("initialized and reduced uGrid\n")
+print("initialized and reduced uGrid")
 print(uGrid[0:8])
 print(uGrid[9:17])
 print(uGrid[18:26])
