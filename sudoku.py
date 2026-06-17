@@ -126,12 +126,54 @@ def tbtReduce(uGrid, index, value):
 
 def lookForSingleUs(uGrid):
     premise = []
+    # checks for uGrid cells with a single potential solution
     for x in uGrid:
         if len(x) == 1:
             premise += [x]
         else:
             premise += [" "]
-    return premise
+    # also check rows, columns, and 3x3s for potentials that only show up once
+    xuGrid = uGrid
+    # ROW
+    for index in range(81):
+        iStart = 9*int(index/9)
+        for v in xuGrid[index]:
+            if len(xuGrid[index]) > 1:
+                # check rest of row to see if that v (value) shows up anywhere else
+                tally = 0
+                for c in range(9):
+                    if xuGrid[iStart + c].find(v) != -1:
+                        tally += 1
+                if tally == 1:
+                    xuGrid[index] = v
+            else:
+                continue
+    # COL
+    for index in range(81):
+        iStart = index
+        for v in xuGrid[index]:
+            if len(xuGrid[index]) > 1:
+                # check rest of column to see if that v (value) shows up anywhere else
+                tally = 0
+                for c in range(9):
+                    if xuGrid[(iStart + 9*c)%81].find(v) != -1:
+                        tally += 1
+                if tally == 1:
+                    xuGrid[index] = v
+    # TBT
+    for index in range(81):
+        iStart = 27*int(index/27) + 3*int((index%9)/3)
+        for v in xuGrid[index]:
+            if len(xuGrid[index]) > 1:
+                # check rest of 3x3 to see if that v (value) shows up anywhere else
+                tally = 0
+                for cX in range(3):
+                    for cY in range(3):
+                        if xuGrid[iStart + cX + 9*cY].find(v) != -1:
+                            tally += 1
+                if tally == 1:
+                    xuGrid[index] = v
+    return premise, xuGrid
 
 def checkUTotal(uGrid):
     uTotal = 0
@@ -154,7 +196,7 @@ def initializeUGrid(premise):
                 uGrid = rowReduce(uGrid, i, xPremise[i])
                 uGrid = colReduce(uGrid, i, xPremise[i])
                 uGrid = tbtReduce(uGrid, i, xPremise[i])
-        xPremise = lookForSingleUs(uGrid)
+        xPremise, uGrid = lookForSingleUs(uGrid)
         uTotal1 = checkUTotal(uGrid)
     return xPremise, uGrid
 
