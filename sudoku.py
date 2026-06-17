@@ -81,15 +81,15 @@ while premise == False:
     premise = initialPuzzleEntry()
 
 print("original premise")
-print(premise[0:8])
-print(premise[9:17])
-print(premise[18:26])
-print(premise[27:35])
-print(premise[36:44])
-print(premise[45:53])
-print(premise[54:62])
-print(premise[63:71])
-print(premise[72:80])
+print(premise[:9])
+print(premise[9:18])
+print(premise[18:27])
+print(premise[27:36])
+print(premise[36:45])
+print(premise[45:54])
+print(premise[54:63])
+print(premise[63:72])
+print(premise[72:])
 
 
 
@@ -144,42 +144,43 @@ def initializeUGrid(premise):
     xPremise = premise
     for x in range(81):
         uGrid += ["123456789"]
-    uTotal0 = checkUTotal(uGrid) # initialize uTotal (total potential values in grid)
-    uTotal1 = 10*81
-    while uTotal1 > uTotal0:
+    uTotal0 = 10*81 # initialize uTotal (total potential values in grid)
+    uTotal1 = checkUTotal(uGrid)
+    while uTotal0 > uTotal1:
         print("debug")
+        uTotal0 = uTotal1
         for i in range(len(xPremise)):
             if xPremise[i] != " ":
                 uGrid = rowReduce(uGrid, i, xPremise[i])
                 uGrid = colReduce(uGrid, i, xPremise[i])
                 uGrid = tbtReduce(uGrid, i, xPremise[i])
         xPremise = lookForSingleUs(uGrid)
-        uTotalNew = checkUTotal(uGrid)
+        uTotal1 = checkUTotal(uGrid)
     return xPremise, uGrid
 
 
 premise, uGrid = initializeUGrid(premise)
 print("grid state after initialization and first reduction")
-print(premise[0:8])
-print(premise[9:17])
-print(premise[18:26])
-print(premise[27:35])
-print(premise[36:44])
-print(premise[45:53])
-print(premise[54:62])
-print(premise[63:71])
-print(premise[72:80])
+print(premise[:9])
+print(premise[9:18])
+print(premise[18:27])
+print(premise[27:36])
+print(premise[36:45])
+print(premise[45:54])
+print(premise[54:63])
+print(premise[63:72])
+print(premise[72:])
 
 print("initialized and reduced uGrid")
-print(uGrid[0:8])
-print(uGrid[9:17])
-print(uGrid[18:26])
-print(uGrid[27:35])
-print(uGrid[36:44])
-print(uGrid[45:53])
-print(uGrid[54:62])
-print(uGrid[63:71])
-print(uGrid[72:80])
+print(uGrid[:9])
+print(uGrid[9:18])
+print(uGrid[18:27])
+print(uGrid[27:36])
+print(uGrid[36:45])
+print(uGrid[45:54])
+print(uGrid[54:63])
+print(uGrid[63:72])
+print(uGrid[72:])
 
 
 
