@@ -1,4 +1,4 @@
-import math
+import itertools
 
 debug = []
 for x in range(32):
@@ -201,34 +201,56 @@ def initializeUGrid(premise):
         uTotal1 = checkUTotal(uGrid)
     return xPremise, uGrid
 
-def printGrid(g, desc)
+def printGrid(g, desc):
+    print(desc)
+    print(g[:9])
+    print(g[9:18])
+    print(g[18:27])
+    print(g[27:36])
+    print(g[36:45])
+    print(g[45:54])
+    print(g[54:63])
+    print(g[63:72])
+    print(g[72:])
     return
+
+def justBruteForceTheRest(premise, uGrid):
+    premiseW = premise
+    uGridW = uGrid
+    # set up ranges
+    ranges = []
+    for cell in uGridW:
+        r = []
+        for u in cell:
+            r += [u]
+        ranges += [r]
+    solved = False
+    while solved == False:
+        for permutations in itertools.product(*ranges):
+            uGridW = uGrid
+            
+
+        
+
+    return xpremise, xuGrid
+
+def checkForContradictions(uGrid):
+    for cell in uGrid:
+        if len(cell) == 0:
+            return True
+    return False
 
 
 premise, uGrid = initializeUGrid(premise)
-print("grid state after initialization and first reduction")
-print(premise[:9])
-print(premise[9:18])
-print(premise[18:27])
-print(premise[27:36])
-print(premise[36:45])
-print(premise[45:54])
-print(premise[54:63])
-print(premise[63:72])
-print(premise[72:])
+printGrid(premise, "grid state after initialization and first reduction")
+printGrid(uGrid, "initialized and reduced uGrid")
 
-print("initialized and reduced uGrid")
-print(uGrid[:9])
-print(uGrid[9:18])
-print(uGrid[18:27])
-print(uGrid[27:36])
-print(uGrid[36:45])
-print(uGrid[45:54])
-print(uGrid[54:63])
-print(uGrid[63:72])
-print(uGrid[72:])
-
-
+if checkUTotal(uGrid) > 81:
+    print("brute force the rest...")
+    premise, uGrid = justBruteForceTheRest(premise, uGrid)
+    printGrid(premise, "final grid state")
+else:
+    print("done")
 
 # to do
 # //// check for empty cells in uGrid (contradictions)
