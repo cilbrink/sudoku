@@ -189,7 +189,8 @@ def initializeUGrid(premise):
     uTotal0 = 10*81 # initialize uTotal (total potential values in grid)
     uTotal1 = checkUTotal(uGrid)
     while uTotal0 > uTotal1:
-        print("debug")
+        iter = 0
+        print("iteration " + str(iter) + ": uTotal = " + str(uTotal0))
         uTotal0 = uTotal1
         for i in range(len(xPremise)):
             if xPremise[i] != " ":
@@ -199,6 +200,9 @@ def initializeUGrid(premise):
         xPremise, uGrid = lookForSingleUs(uGrid)
         uTotal1 = checkUTotal(uGrid)
     return xPremise, uGrid
+
+def printGrid(g, desc)
+    return
 
 
 premise, uGrid = initializeUGrid(premise)
