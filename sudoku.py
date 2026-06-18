@@ -214,25 +214,57 @@ def printGrid(g, desc):
     print(g[72:])
     return
 
+def isSolved(uGrid):
+    for cell in uGrid:
+        if len(cell) != 1:
+            return False
+    return True
+
 def justBruteForceTheRest(premise, uGrid):
     premiseW = premise
     uGridW = uGrid
-    # set up ranges
-    ranges = []
-    for cell in uGridW:
-        r = []
-        for u in cell:
-            r += [u]
-        ranges += [r]
     solved = False
-    while solved == False:
-        for permutations in itertools.product(*ranges):
-            uGridW = uGrid
-            
-
-        
-
-    return xpremise, xuGrid
+    noCon = True
+    for cell in range(len(uGridW)):
+        # reset grid to state at start of brute force permutations
+        uGridTemp = uGridW
+        premiseTemp = premiseW
+        if len(uGridW[cell]) != 1:
+            for v in uGridW[cell]:
+                if solved == False:
+                    premiseTemp = premiseW
+                    uGridTemp = uGridW
+                    print("trying " + str(v) + " in cell " + str(cell))
+                    #input()
+                    
+                    # try one of the u-values
+                    premiseTemp[cell] = v
+                    
+                    # reduce the u-grid based on this trying value
+                    premiseTemp, uGridTemp = initializeUGrid(premiseTemp)
+                    printGrid(uGridTemp, "")
+                    
+                    # if this resulted in a contradiction, move on to the next trying u-value
+                    print("checking for contradictions")
+                    
+                    if checkForContradictions(uGridTemp) == True:
+                        print("contradiction found")
+                        # return premiseTemp, uGridTemp, False, False
+                        continue
+                    
+                    # if this did not result in a contradiction, try the next unsolved cell
+                    print("no contradiction found")
+                    
+                    if checkForContradictions(uGridTemp) == False:
+                        if isSolved(uGridTemp):
+                            print("solution found")
+                            printGrid(premiseTemp, "")
+                            return premiseTemp, uGridTemp, True, True
+                        premiseTemp, uGridTemp, solved, noCon = justBruteForceTheRest(premiseTemp, uGridTemp)
+                if solved == True:
+                    return premiseTemp, uGridTemp, True, True
+    print("something weird happened if we got to this point")
+    return premiseTemp, uGridTemp, solved, noCon
 
 def checkForContradictions(uGrid):
     for cell in uGrid:
@@ -247,7 +279,7 @@ printGrid(uGrid, "initialized and reduced uGrid")
 
 if checkUTotal(uGrid) > 81:
     print("brute force the rest...")
-    premise, uGrid = justBruteForceTheRest(premise, uGrid)
+    premise, uGrid, done, noCon = justBruteForceTheRest(premise, uGrid)
     printGrid(premise, "final grid state")
 else:
     print("done")
