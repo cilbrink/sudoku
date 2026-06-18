@@ -7,7 +7,7 @@ for x in range(32):
 # use temporary debug grid (not user-input)
 debug[0] = True
 # use NYT 2026-06-15 medium (=False) or hard (=True) puzzle
-debug[1] = False
+debug[1] = True
 
 
 # puzzle entry line-by-line input from the user
