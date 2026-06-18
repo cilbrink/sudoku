@@ -1,4 +1,4 @@
-import itertools
+import math
 
 debug = []
 for x in range(32):
@@ -8,6 +8,10 @@ for x in range(32):
 debug[0] = True
 # use NYT 2026-06-15 medium (=False) or hard (=True) puzzle
 debug[1] = True
+# even harder puzzle in debug[1] (debug[2] == True: use the harder puzzle)
+debug[2] = True
+# test with an already-contradictory puzzle (debug[3] = unsolvable)
+debug[3] = False
 
 
 # puzzle entry line-by-line input from the user
@@ -25,32 +29,59 @@ def initialPuzzleEntry():
                 print("ERROR: invalid entry")
         premise = deDimensionalize(premiseArray)
     if debug[0] == True:
-        if debug[1] == False:
-            pass
-            # NYT medium difficulty
+        if debug[3] == False:
+            if debug[1] == False:
+                # NYT medium difficulty
+                premise = [
+                    "1","6"," "," "," "," "," "," "," ",
+                    " ","2"," "," "," "," ","8","5"," ",
+                    " ","5"," "," "," ","7","9"," ","1",
+                    "2"," ","7"," "," "," "," "," ","8",
+                    " "," "," "," ","4"," ","5"," "," ",
+                    " ","3"," "," "," ","2"," "," "," ",
+                    "9","4"," "," "," "," ","3"," "," ",
+                    " "," "," "," ","5","1"," "," "," ",
+                    "3"," "," ","6"," "," "," ","7"," "
+                    ]
+            if debug[1] == True:
+                if debug[2] == False:
+                    # NYT hard difficulty
+                    premise = [
+                        " "," ","2"," ","6"," "," "," "," ",
+                        " "," ","6","8","1"," ","2"," "," ",
+                        "8"," "," ","9"," "," "," ","7"," ",
+                        " "," "," ","3"," "," "," "," "," ",
+                        "1"," "," "," ","8"," "," ","2","9",
+                        " "," "," ","2","5"," ","6"," "," ",
+                        " "," ","7"," "," "," "," "," "," ",
+                        "2"," ","4"," "," "," ","1","6","5",
+                        " "," ","3"," "," "," "," ","8","7"
+                        ]
+                if debug[2] == True:
+                    # super hard puzzle
+                    premise = [
+                        " "," "," ","1"," ","2"," "," "," ",
+                        " ","6"," "," "," "," "," ","7"," ",
+                        " "," ","8"," "," "," ","9"," "," ",
+                        "4"," "," "," "," "," "," "," ","3",
+                        " ","5"," "," "," ","7"," "," "," ",
+                        "2"," "," "," ","8"," "," "," ","1",
+                        " "," ","9"," "," "," ","8"," ","5",
+                        " ","7"," "," "," "," "," ","6"," ",
+                        " "," "," ","3"," ","4"," "," "," ",
+                        ]
+        else:
             premise = [
-                "1","6"," "," "," "," "," "," "," ",
-                " ","2"," "," "," "," ","8","5"," ",
-                " ","5"," "," "," ","7","9"," ","1",
-                "2"," ","7"," "," "," "," "," ","8",
-                " "," "," "," ","4"," ","5"," "," ",
-                " ","3"," "," "," ","2"," "," "," ",
-                "9","4"," "," "," "," ","3"," "," ",
-                " "," "," "," ","5","1"," "," "," ",
-                "3"," "," ","6"," "," "," ","7"," "]
-        if debug[1] == True:
-            pass
-            # NYT hard difficulty
-            premise = [
-                " "," ","2"," ","6"," "," "," "," ",
-                " "," ","6","8","1"," ","2"," "," ",
-                "8"," "," ","9"," "," "," ","7"," ",
-                " "," "," ","3"," "," "," "," "," ",
-                "1"," "," "," ","8"," "," ","2","9",
-                " "," "," ","2","5"," ","6"," "," ",
-                " "," ","7"," "," "," "," "," "," ",
-                "2"," ","4"," "," "," ","1","6","5",
-                " "," ","3"," "," "," "," ","8","7"]
+                " "," "," ","1"," ","1"," "," "," ", # was 000102000
+                " ","6"," "," "," "," "," ","7"," ",
+                " "," ","8"," "," "," ","9"," "," ",
+                "4"," "," "," "," "," "," "," ","3",
+                " ","5"," "," "," ","7"," "," "," ",
+                "2"," "," "," ","8"," "," "," ","1",
+                " "," ","9"," "," "," ","8"," ","5",
+                " ","7"," "," "," "," "," ","6"," ",
+                " "," "," ","3"," ","4"," "," "," ",
+                ]
         print("debug[0] == True: len(premise) = " + str(len(premise)))
     return premise
 
@@ -280,9 +311,9 @@ printGrid(uGrid, "initialized and reduced uGrid")
 if checkUTotal(uGrid) > 81:
     print("brute force the rest...")
     premise, uGrid, done, noCon = justBruteForceTheRest(premise, uGrid)
-    printGrid(premise, "final grid state")
+    # printGrid(premise, "final grid state")
 else:
-    print("done")
+    print("done... no solution found")
 
 # to do
 # //// check for empty cells in uGrid (contradictions)
