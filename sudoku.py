@@ -232,6 +232,11 @@ def initializeUGrid(premise):
         uTotal1 = checkUTotal(uGrid)
     return xPremise, uGrid
 
+def checkForInitialContradictions(uGrid):
+    # check that uGrid matches for cells where the premise is given
+    # check that there are no contradictions immediately upon first initialization
+    return
+
 def printGrid(g, desc):
     print(desc)
     print(g[:9])
