@@ -7,9 +7,9 @@ for x in range(32):
 # use temporary debug grid (not user-input)
 debug[0] = True
 # use NYT 2026-06-15 medium (=False) or hard (=True) puzzle
-debug[1] = True
+debug[1] = False
 # even harder puzzle in debug[1] (debug[2] == True: use the harder puzzle)
-debug[2] = True
+debug[2] = False
 # test with an already-contradictory puzzle (debug[3] = unsolvable)
 debug[3] = False
 
@@ -98,18 +98,12 @@ def deDimensionalize(array):
         print("ERROR: invalid puzzle length")
         return False
 
-def initialize():
-    premise = initialPuzzleEntry()
-    if premise != False:
-        pass
-    else:
-        return False
-
 # collect initial puzzle entry from user
 # retries if the puzzle entry is invalid
 premise = False
 while premise == False:
     premise = initialPuzzleEntry()
+p0 = premise
 
 print("original premise")
 print(premise[:9])
@@ -232,10 +226,20 @@ def initializeUGrid(premise):
         uTotal1 = checkUTotal(uGrid)
     return xPremise, uGrid
 
-def checkForInitialContradictions(uGrid):
+def checkForInitialContradictionsNOK(p0, u):
+    # p0 = original (before initializeUGrid()) puzzle
     # check that uGrid matches for cells where the premise is given
+    for x in range(len(p0)):
+        if p0[x] != " ":
+            if u[x] != p0[x]:
+                print("ERROR: initial state NOK, initial uGrid reduction resulted in a cell from the original puzzle being overwritten")
+                return True
     # check that there are no contradictions immediately upon first initialization
-    return
+    for x in range(len(u)):
+        if u[x] == "":
+            print("ERROR: initial state NOK, initial uGrid reduction resulted in a cell with zero potential solutions")
+            return True
+    return False
 
 def printGrid(g, desc):
     print(desc)
@@ -312,13 +316,15 @@ def checkForContradictions(uGrid):
 premise, uGrid = initializeUGrid(premise)
 printGrid(premise, "grid state after initialization and first reduction")
 printGrid(uGrid, "initialized and reduced uGrid")
-
-if checkUTotal(uGrid) > 81:
-    print("brute force the rest...")
-    premise, uGrid, done, noCon = justBruteForceTheRest(premise, uGrid)
-    # printGrid(premise, "final grid state")
+if checkForInitialContradictionsNOK(premise, uGrid):
+    print("ERROR: invalid initial board detected")
 else:
-    print("done... no solution found")
+    if checkUTotal(uGrid) > 81:
+        print("brute force the rest...")
+        premise, uGrid, done, noCon = justBruteForceTheRest(premise, uGrid)
+        # printGrid(premise, "final grid state")
+    else:
+        print("done... no solution found")
 
 # to do
 # //// check for empty cells in uGrid (contradictions)
