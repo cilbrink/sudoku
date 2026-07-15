@@ -5,7 +5,7 @@ for x in range(32):
     debug += [False]
 
 # use temporary debug grid (not user-input)
-debug[0] = True
+debug[0] = False
 # use NYT 2026-06-15 medium (=False) or hard (=True) puzzle
 debug[1] = True
 
@@ -54,7 +54,8 @@ def initialPuzzleEntry():
         print("debug[0] == True: len(premise) = " + str(len(premise)))
     return premise
 
-def deDimensionalize(array):
+def deDimensionalize(array):# to do
+# //// check for empty cells in uGrid (contradictions)
     puzzle = []
     for x in array:
         print(x)
@@ -284,5 +285,11 @@ if checkUTotal(uGrid) > 81:
 else:
     print("done")
 
-# to do
-# //// check for empty cells in uGrid (contradictions)
+if debug[0] == True:
+    print("debug[0] == True: using temporary debug grid")
+if debug[1] == True:
+    print("debug[1] == True: using NYT 2026-06-15 hard puzzle")
+else:
+    print("debug[1] == False: using NYT 2026-06-15 medium puzzle")
+
+
